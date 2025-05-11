@@ -4,8 +4,15 @@ from pydantic import BaseModel
 from shapely.geometry import shape
 import numpy as np
 import joblib
+from pydantic import BaseModel
+from typing import Dict
+from utils import get_bbox_from_geojson, ndvi_file_exists
+
 
 app = FastAPI()
+
+class PredictRequest(BaseModel):
+    polygon: Dict
 
 # CORS: React frontend'e izin ver
 app.add_middleware(
@@ -23,12 +30,24 @@ class GeoJSONRequest(BaseModel):
 
 @app.post("/predict/")
 async def predict_crop_yield(data: GeoJSONRequest):
-    polygon = shape(data.geometry)  # GeoJSON → shapely
-    ndvi_mean = 0.72  # (test için sabit — sonra NDVI raster'dan hesaplanacak)
+    polygon = shape(data.geometry)
+    bbox = get_bbox_from_geojson(data.geometry)
+    exists, raster_path = ndvi_file_exists(bbox)
 
-    predicted_yield = model.predict([[ndvi_mean]])[0]
+    if exists:
+        ndvi_mean = 0.72
+        predicted_yield = model.predict([[ndvi_mean]])[0]
 
-    return {
-        "ndvi": ndvi_mean,
-        "tahmini_rekolte": round(predicted_yield, 2)
-    }
+        return {
+            "status": "Raster bulundu",
+            "ndvi": ndvi_mean,
+            "tahmini_rekolte": round(predicted_yield, 2),
+            "raster_path": raster_path
+        }
+    else:
+        return {
+            "status": "Raster bulunamadı",
+            "bbox": bbox
+        }
+
+# raster
