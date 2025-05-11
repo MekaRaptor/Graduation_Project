@@ -1,0 +1,1 @@
+server/app/models/deeplabv3_rgbnir_best.pth filter=lfs diff=lfs merge=lfs -text

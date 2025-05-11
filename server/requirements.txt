@@ -1,0 +1,14 @@
+fastapi>=0.68.1
+uvicorn>=0.15.0
+python-multipart>=0.0.5
+torch>=2.2.1
+torchvision>=0.17.1
+Pillow>=9.5.0
+numpy>=1.24.3
+shapely>=2.0.1
+python-jose>=3.3.0
+sqlalchemy>=1.4.41
+joblib>=1.2.0
+python-dotenv>=1.0.0
+setuptools>=80.4.0
+wheel>=0.45.1 
