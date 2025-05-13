@@ -22,20 +22,7 @@ app.add_middleware(
 #model = joblib.load("model/yield_model.pkl")
 anomaly_detector = AnomalyDetector()
 
-class GeoJSONRequest(BaseModel):
-    geometry: dict
 
-@app.post("/predict/")
-async def predict_crop_yield(data: GeoJSONRequest):
-    polygon = shape(data.geometry)  # GeoJSON → shapely
-    ndvi_mean = 0.72  # (test için sabit — sonra NDVI raster'dan hesaplanacak)
-
-    predicted_yield = model.predict([[ndvi_mean]])[0]
-
-    return {
-        "ndvi": ndvi_mean,
-        "tahmini_rekolte": round(predicted_yield, 2)
-    }
 
 @app.post("/detect-anomaly/")
 async def detect_anomaly(file: UploadFile = File(...)):
