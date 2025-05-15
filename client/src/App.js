@@ -15,19 +15,21 @@ const { BaseLayer } = LayersControl;
 
 const App = () => {
   const onCreated = async (e) => {
-    const geometry = e.layer.toGeoJSON().geometry;
+  const geometry = e.layer.toGeoJSON().geometry;
 
-    try {
-      const response = await axios.post("http://localhost:8000/predict/", {
-        geometry: geometry,
-      });
+  try {
+    const response = await axios.post("http://localhost:8000/predict/", {
+      geometry: geometry,
+    });
+    console.log("Gönderilen polygon GeoJSON:", geometry);
 
-      const { ndvi, rekolte } = response.data;
-      alert(`NDVI: ${ndvi}, Rekolte Tahmini: ${rekolte} kg/ha`);
-    } catch (error) {
-      alert("Tahmin alınamadı: " + error.message);
-    }
-  };
+    
+    const { ndvi, tahmini_rekolte } = response.data;
+    alert(`NDVI: ${ndvi}, Rekolte Tahmini: ${tahmini_rekolte} kg/ha`);
+  } catch (error) {
+    alert("Tahmin alınamadı: " + error.message);
+  }
+};
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>

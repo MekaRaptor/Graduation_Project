@@ -7,8 +7,11 @@ import joblib
 from PIL import Image
 import io
 from model_loader import AnomalyDetector
-
+from typing import Dict
 app = FastAPI()
+
+class GeoJSONRequest(BaseModel):
+    geometry: Dict
 
 # CORS: React frontend'e izin ver
 app.add_middleware(
@@ -22,7 +25,7 @@ app.add_middleware(
 #model = joblib.load("model/yield_model.pkl")
 anomaly_detector = AnomalyDetector()
 
-
+# Anomali tespiti için sınıf
 
 @app.post("/detect-anomaly/")
 async def detect_anomaly(file: UploadFile = File(...)):
@@ -39,3 +42,19 @@ async def detect_anomaly(file: UploadFile = File(...)):
         "is_anomaly": result["is_anomaly"],
         "status": result["status"]
     }
+
+@app.post("/predict/")
+async def predict_crop_yield(data: GeoJSONRequest):
+        polygon = shape(data.geometry)
+        # Burada polygon ile işlem yapabilirsin, şimdilik sabit değer dönüyoruz
+        ndvi_mean = 0.72
+        tahmini_rekolte = 3500
+
+        return {
+        "ndvi": ndvi_mean,
+        "tahmini_rekolte": tahmini_rekolte
+    }
+
+
+
+# tif dosyasını indirme.
