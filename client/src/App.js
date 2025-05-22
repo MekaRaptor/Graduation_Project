@@ -7,28 +7,27 @@ import {
 } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import axios from "axios";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import AnomalyPage from "./AnomalyPage";
 
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 
 const { BaseLayer } = LayersControl;
 
-const App = () => {
+const HomePage = () => {
   const onCreated = async (e) => {
     const geometry = e.layer.toGeoJSON().geometry;
-
     try {
       const response = await axios.post("http://localhost:8000/predict/", {
         geometry: geometry,
       });
-
       const { ndvi, rekolte } = response.data;
       alert(`NDVI: ${ndvi}, Rekolte Tahmini: ${rekolte} kg/ha`);
     } catch (error) {
       alert("Tahmin alınamadı: " + error.message);
     }
   };
-
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <MapContainer center={[39.9208, 32.8541]} zoom={17} style={{ height: "100%", width: "100%" }}>
@@ -39,7 +38,6 @@ const App = () => {
               attribution="&copy; OpenStreetMap contributors"
             />
           </BaseLayer>
-
           <BaseLayer name="ESRI Uydu Görünümü">
             <TileLayer
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
@@ -47,7 +45,6 @@ const App = () => {
             />
           </BaseLayer>
         </LayersControl>
-
         <FeatureGroup>
           <EditControl
             position="topright"
@@ -64,6 +61,23 @@ const App = () => {
         </FeatureGroup>
       </MapContainer>
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <nav>
+        <ul>
+          <li><Link to="/">Ana Sayfa</Link></li>
+          <li><Link to="/anomaly">Anomali Tespiti</Link></li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/anomaly" element={<AnomalyPage />} />
+      </Routes>
+    </Router>
   );
 };
 

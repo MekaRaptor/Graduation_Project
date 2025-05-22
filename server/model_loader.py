@@ -7,6 +7,18 @@ import torchvision.transforms as transforms
 import os
 
 class_names_9 = [
+    "background",
+    "double_plant",
+    "drydown",
+    "endrow",
+    "nutrient_deficiency",
+    "planter_skip",
+    "water",
+    "waterway",
+    "weed_cluster"
+]
+
+class_names_10 = [
     "background",        # 0
     "double_plant",     # 1
     "drydown",          # 2
@@ -19,10 +31,10 @@ class_names_9 = [
 ]
 
 class AnomalyDetector:
-    def __init__(self, model_path):
+    def __init__(self, model_path, num_classes=9, class_names=None):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.class_names = class_names_9
-        self.model = self._load_model(model_path, num_classes=9)
+        self.class_names = class_names if class_names is not None else class_names_9
+        self.model = self._load_model(model_path, num_classes=num_classes)
         self.transform = transforms.Compose([
             transforms.Resize((512, 512)),
             transforms.ToTensor(),
@@ -79,7 +91,7 @@ class AnomalyDetector:
             result["probs"] = class_probabilities
         return result
 
-# Sadece finalv4 modelini yükle
+# Sadece deeplabv3_rgnir_best.pth modelini yükle
 script_dir = os.path.dirname(os.path.abspath(__file__))
 v4_path = os.path.join(script_dir, "app", "models", "deeplabv3_rgbnir_finalv4.pth")
-anomaly_detector = AnomalyDetector(v4_path)
+anomaly_detector = AnomalyDetector(v4_path, num_classes=9, class_names=class_names_9)
