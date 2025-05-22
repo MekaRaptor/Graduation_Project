@@ -1,13 +1,19 @@
+import os
 from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from shapely.geometry import shape
+from shapely.geometry import shape, box
 import numpy as np
 import joblib
 from PIL import Image
 import io
-from model_loader import AnomalyDetector
+import rasterio
+#from model_loader import AnomalyDetector
 from typing import Dict
+from database import SessionLocal
+
+
+
 app = FastAPI()
 
 class GeoJSONRequest(BaseModel):
@@ -23,10 +29,11 @@ app.add_middleware(
 
 # Modelleri yükle
 #model = joblib.load("model/yield_model.pkl")
-anomaly_detector = AnomalyDetector()
+#anomaly_detector = AnomalyDetector()
+
+
 
 # Anomali tespiti için sınıf
-
 @app.post("/detect-anomaly/")
 async def detect_anomaly(file: UploadFile = File(...)):
     # Gelen dosyayı oku ve PIL Image'e çevir
@@ -43,18 +50,12 @@ async def detect_anomaly(file: UploadFile = File(...)):
         "status": result["status"]
     }
 
+
+
+
+# Rekolte tahmini için sınıf
+
+
+
 @app.post("/predict/")
 async def predict_crop_yield(data: GeoJSONRequest):
-        polygon = shape(data.geometry)
-        # Burada polygon ile işlem yapabilirsin, şimdilik sabit değer dönüyoruz
-        ndvi_mean = 0.72
-        tahmini_rekolte = 3500
-
-        return {
-        "ndvi": ndvi_mean,
-        "tahmini_rekolte": tahmini_rekolte
-    }
-
-
-
-# tif dosyasını indirme.
