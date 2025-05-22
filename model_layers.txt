@@ -1,0 +1,4 @@
+classifier.4.weight: torch.Size([9, 256, 1, 1])
+classifier.4.bias: torch.Size([9])
+aux_classifier.4.weight: torch.Size([21, 256, 1, 1])
+aux_classifier.4.bias: torch.Size([21])

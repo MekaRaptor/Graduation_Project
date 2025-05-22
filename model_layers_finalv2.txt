@@ -1,0 +1,2 @@
+classifier.4.weight: torch.Size([10, 256, 1, 1])
+classifier.4.bias: torch.Size([10])
