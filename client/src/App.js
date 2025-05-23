@@ -69,4 +69,25 @@ const App = () => {
   );
 };
 
+<<<<<<< Updated upstream
+=======
+const App = () => {
+  return (
+    <Router>
+      <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <ul>
+          <li><Link to="/">Ana Sayfa</Link></li>
+          <li><Link to="/anomaly">Anomali Tespiti</Link></li>
+        </ul>
+        <img src="/Web_logo.png" alt="Logo" style={{ height: 40, marginRight: 24 }} />
+      </nav>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/anomaly" element={<AnomalyPage />} />
+      </Routes>
+    </Router>
+  );
+};
+
+>>>>>>> Stashed changes
 export default App;

@@ -1,13 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  font-family: 'Poppins', Arial, sans-serif;
+  color: #23422a;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+nav {
+  background: #388e3c;
+  padding: 0 0 0 24px;
+  box-shadow: 0 2px 8px #0001;
+}
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 24px;
+}
+nav ul li {
+  display: inline-block;
+}
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 18px 0 16px 0;
+  display: inline-block;
+  transition: color 0.2s;
+}
+nav ul li a:hover {
+  color: #a5d6a7;
+}
+
+/* Sekme butonları */
+.tab-btn {
+  padding: 10px 28px;
+  border-radius: 8px 8px 0 0;
+  border: none;
+  background: #e8f5e9;
+  color: #388e3c;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: -2px;
+  box-shadow: 0 2px 8px #0001;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.tab-btn.active {
+  background: #388e3c;
+  color: #fff;
+}
+.tab-btn:not(.active):hover {
+  background: #c8e6c9;
+}
+
+/* Kart/kutu */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px #0002;
+  padding: 32px 28px;
+  margin: 40px auto;
+  max-width: 520px;
+}
+
+/* Form ve input */
+input[type="file"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #a5d6a7;
+  background: #f1f8e9;
+  font-family: inherit;
+}
+button[type="submit"] {
+  padding: 12px;
+  border-radius: 8px;
+  background: #43a047;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button[type="submit"]:hover {
+  background: #2e7031;
+}
+
+/* Progress bar */
+.progress-bar-bg {
+  background: #e0f2f1;
+  border-radius: 6px;
+  height: 12px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #66bb6a 0%, #388e3c 100%);
+  border-radius: 6px;
+  transition: width 0.4s;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .card {
+    padding: 18px 6px;
+    max-width: 98vw;
+  }
+  nav ul {
+    gap: 10px;
+  }
 }
