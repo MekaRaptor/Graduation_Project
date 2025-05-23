@@ -18,7 +18,7 @@ const App = () => {
   const geometry = e.layer.toGeoJSON().geometry;
 
   try {
-    const response = await axios.post("http://localhost:8000/predict/", {
+    const response = await axios.post("http://localhost:8000/get_polygon/", {
       geometry: geometry,
     });
     console.log("Gönderilen polygon GeoJSON:", geometry);
