@@ -1,33 +1,69 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { MapContainer, TileLayer, LayersControl } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import {
+  MapContainer,
+  TileLayer,
+  LayersControl,
+  FeatureGroup,
+} from 'react-leaflet';
+import { EditControl } from 'react-leaflet-draw';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-draw/dist/leaflet.draw.css';
+import axios from 'axios';
+
+const { BaseLayer } = LayersControl;
+
+const onCreated = async (e) => {
+  const geometry = e.layer.toGeoJSON().geometry;
+
+  try {
+    const response = await axios.post("http://localhost:8000/get_polygon/", {
+      geometry: geometry,
+    });
+    console.log("Gönderilen polygon GeoJSON:", geometry);
+
+    
+    const { ndvi, tahmini_rekolte } = response.data;
+    alert(`NDVI: ${ndvi}, Rekolte Tahmini: ${tahmini_rekolte} kg/ha`);
+  } catch (error) {
+    alert("Tahmin alınamadı: " + error.message);
+  }
+};
 
 function SatelliteView() {
   return (
-    <div style={{ textAlign: "center", marginTop: 40 }}>
-      <h3>Uydu Görüntüsü</h3>
-      <div style={{ color: '#888', marginTop: 24 }}>
-        Burada uydu haritası veya görseli gösterilecek (placeholder).
-      </div>
-      <div style={{ margin: "32px auto", maxWidth: 900, height: 400 }}>
-        <MapContainer center={[39.9208, 32.8541]} zoom={15} style={{ height: "100%", width: "100%", borderRadius: 12, boxShadow: "0 2px 12px #0001" }}>
-          <LayersControl position="topright">
-            <LayersControl.BaseLayer checked name="OpenStreetMap">
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="&copy; OpenStreetMap contributors"
-              />
-            </LayersControl.BaseLayer>
-            <LayersControl.BaseLayer name="ESRI Uydu Görünümü">
-              <TileLayer
-                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
-              />
-            </LayersControl.BaseLayer>
-          </LayersControl>
-        </MapContainer>
-      </div>
+    <div style={{ height: "100vh", width: "100%" }}>
+      <MapContainer center={[39.9208, 32.8541]} zoom={17} style={{ height: "100%", width: "100%" }}>
+        <LayersControl position="topright">
+          <BaseLayer checked name="OpenStreetMap">
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution="&copy; OpenStreetMap contributors"
+            />
+          </BaseLayer>
+
+          <BaseLayer name="ESRI Uydu Görünümü">
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
+            />
+          </BaseLayer>
+        </LayersControl>
+
+        <FeatureGroup>
+          <EditControl
+            position="topright"
+            draw={{
+              polygon: true,
+              rectangle: true,
+              circle: false,
+              polyline: false,
+              marker: false,
+              circlemarker: false,
+            }}
+            onCreated={onCreated}
+          />
+        </FeatureGroup>
+      </MapContainer>
     </div>
   );
 }
